@@ -33,7 +33,6 @@ function moveSlide(direction) {
   slider.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
 }
 
-// Un pequeño truco de UX: Si el usuario gira el celular o cambia el tamaño de la ventana,
 // reseteamos el slider al inicio para que no se rompa visualmente.
 window.addEventListener("resize", () => {
     currentIndex = 0;
@@ -45,58 +44,33 @@ window.addEventListener("resize", () => {
 
 //Menu desplegable---------------------------
 
-document.addEventListener("DOMContentLoaded", () => {
-    const btnMenu = document.getElementById("btn-menu");
-    const menuPrincipal = document.getElementById("menu-principal");
-    if (btnMenu && menuPrincipal) {
-    // Le "escuchamos" el clic al botón
-    btnMenu.addEventListener("click", () => {
-    menuPrincipal.classList.toggle("hidden");
-    });
-    }
-});
-
-//Sub- Menu de productos, Categorias, Acerca de nosotros
 document.addEventListener('DOMContentLoaded', () => {
-    
+
     const btnMenu = document.getElementById('btn-menu');
     const menuPrincipal = document.getElementById('menu-principal');
 
     if (btnMenu && menuPrincipal) {
         btnMenu.addEventListener('click', () => {
             menuPrincipal.classList.toggle('hidden');
+            console.log("🍔 Menú hamburguesa presionado.");
         });
     }
 
-    // LÓGICA DE LOS SUBMENÚS (Categorías, Productos, etc.) ---
+    // logica de sub menus ---
     const submenuBtns = document.querySelectorAll('.submenu-btn');
 
     submenuBtns.forEach(btn => {
-        // Usamos una función tradicional para no perder el contexto de 'this'
         btn.addEventListener('click', function(event) {
             
-            // Verificamos si la pantalla es tamaño móvil (< 768px según Tailwind)
             if (window.innerWidth < 768) {
-                event.preventDefault(); // Detiene el salto del enlace '#'
+                event.preventDefault(); 
                 
-                // Busca el contenedor <ul> que le sigue a este enlace
                 const submenu = this.nextElementSibling;
                 
                 if (submenu) {
-                    // Cierra los demás submenús abiertos (opcional pero recomendado)
-                    document.querySelectorAll('.submenu-btn + ul').forEach(otherMenu => {
-                        if (otherMenu !== submenu) {
-                            otherMenu.classList.add('hidden');
-                            otherMenu.classList.remove('flex');
-                        }
-                    });
-
-                    // Despliega u oculta el submenú que tocaste
                     submenu.classList.toggle('hidden');
                     submenu.classList.toggle('flex');
-                }
-            }
-        });
+                } 
+    }});
     });
-
 });
