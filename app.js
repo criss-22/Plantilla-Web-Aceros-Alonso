@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnMenu && menuPrincipal) {
         btnMenu.addEventListener('click', () => {
             menuPrincipal.classList.toggle('hidden');
-            console.log("🍔 Menú hamburguesa presionado.");
         });
     }
 
