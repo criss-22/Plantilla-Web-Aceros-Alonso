@@ -1,0 +1,28 @@
+:root {
+    --slate-900: #0f172a;
+    --slate-800: #1e293b;
+    --slate-700: #334155;
+    --slate-200: #e2e8f0;
+    --orange-400: #fb923c;
+    --orange-600: #ea580c;
+    --blue-200: #cfe2ff;
+}
+body { background-color: var(--blue-200); font-family: 'Inter', sans-serif; }
+.bg-slate-900 { background-color: var(--slate-900) !important; }
+.bg-slate-100 { background-color: var(--blue-200) !important; }
+.border-orange-bottom { border-bottom: 3px solid var(--orange-400) !important; }
+.nav-link-custom { color: white !important; text-decoration: none; padding: 8px 16px; font-weight: 600; border-radius: 6px; display: block; transition: 0.2s; }
+.nav-link-custom:hover, .dropdown-item:hover { background-color: var(--orange-400) !important; color: white !important; }
+.dropdown-menu-dark-custom { background-color: var(--slate-900) !important; border: none; }
+.dropdown-item { color: white !important; font-weight: 600; padding: 10px 20px; }
+.select-custom { border: 1px solid var(--slate-200); padding: 10px; border-radius: 8px; }
+.select-custom:focus { border-color: var(--orange-400); box-shadow: 0 0 0 0.25rem rgba(251, 146, 60, 0.25); }
+.btn-orange-custom { background-color: var(--orange-400); color: white; border: none; }
+.btn-orange-custom:hover { background-color: var(--orange-600); color: white; }
+.btn-edit { background-color: #2563eb; color: white; border: none; }
+.btn-edit:hover { background-color: #1d4ed8; color: white; }
+.btn-delete { background-color: #ef4444; color: white; border: none; }
+.btn-delete:hover { background-color: #b91c1c; color: white; }
+.btn-cancel { background-color: #64748b; color: white; border: none; }
+.btn-cancel:hover { background-color: #475569; color: white; }
+@media (max-width: 767.98px) { #admin-aside.active { display: block !important; position: relative; width: 100%; } }
