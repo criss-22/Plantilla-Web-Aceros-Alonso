@@ -1,0 +1,151 @@
+<?php
+require_once 'api.php';
+
+// Obtener el ID de la URL
+$id = $_GET['id'] ?? null;
+if (!$id) {
+    die("ID de producto no proporcionado. Por favor, regresa al listado.");
+}
+
+// Consumir la API para obtener los datos del producto
+$producto = consumirAPI(API_URL . '/' . $id, 'GET');
+
+// Manejar el caso de que el producto no exista
+if (empty($producto)) {
+    die("El producto no existe o no se pudo cargar la información.");
+}
+?>
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Admin | Editar Producto</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../../ACASALogoAcerosA.png" type="image/png" sizes="16px">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 9999;">
+    </div>
+    
+    <header class="navbar navbar-dark bg-slate-900 shadow-md sticky-top px-4 py-2">
+        <div class="container-fluid justify-content-between">
+            <section class="d-flex align-items-center gap-3">
+                <button id="btn-admin-menu" class="navbar-toggler d-md-none border-0 shadow-none text-white p-0">
+                    <svg class="bi" width="28" height="28" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round"></path>
+                    </svg>
+                </button>
+                <img src="../../ACASALogoAcerosA.png" alt="Logo" style="width: 40px;">
+                <h2 class="h5 m-0 fw-bold text-white d-none d-sm-block">Aceros Alonso</h2>
+            </section>
+
+            <nav>
+                <a href="../Login/CerrarSesion.php" class="btn btn-cerrar-sesion btn-sm fw-bold">
+                    Cerrar Sesión
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <aside id="admin-aside" class="bg-slate-900 border-top border-slate-700 d-none d-md-block">
+        <div class="container-fluid py-2">
+            <ul class="nav flex-column flex-md-row gap-md-3">
+                <li class="nav-item"><a href="#" class="nav-link-custom">Consultas</a></li>
+                <li class="nav-item"><a href="./listado.php" class="nav-link-custom">Productos</a></li>
+                <li class="nav-item"><a href="#" class="nav-link-custom">Categorías</a></li>
+
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link-custom dropdown-toggle" data-bs-toggle="dropdown">
+                        Misión Visión <span class="d-md-none small">▼</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark-custom shadow-lg">
+                        <li><a class="dropdown-item" href="#">Misión</a></li>
+                        <li><a class="dropdown-item" href="#">Visión</a></li>
+                        <li><a class="dropdown-item" href="#">Por qué elegirnos</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item"><a href="#" class="nav-link-custom">Usuarios</a></li>
+                <li class="nav-item"><a href="#" class="nav-link-custom">Ubicaciones</a></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link-custom border border-white border-opacity-25">Inicio</a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <main class="container-xl py-5 flex-grow-1">
+        <h1 class="h3 fw-bold text-slate-800 border-orange-bottom pb-2 d-inline-block mb-4">
+            Editar Detalles del Producto #<?php echo htmlspecialchars($id); ?>
+        </h1>
+
+        <div class="card shadow-sm border-0 p-4 bg-white rounded-lg">
+            <form action="procesar.php" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="accion" value="editar"> 
+                <input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($id); ?>"> 
+
+                <h2 class="h5 fw-bold text-slate-700 mb-3 border-bottom pb-2">Información Principal</h2>
+                
+                <div class="row g-3 mb-4">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-slate-700">Nombre del Producto *</label>
+                        <input name="nombre_producto" type="text" class="form-control select-custom" required 
+                               value="<?php echo htmlspecialchars($producto['nombre'] ?? ''); ?>"> 
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-slate-700">Categoría *</label>
+                        <select name="id_categoria" class="form-select select-custom" required>
+                            <?php $cat = $producto['categoria'] ?? ''; ?>
+                            <option value="">-- Seleccione --</option>
+                            <option value="1" <?php echo ($cat == '1' || strtolower($cat) == 'láminas') ? 'selected' : ''; ?>>Láminas</option> 
+                            <option value="2" <?php echo ($cat == '2' || strtolower($cat) == 'tubos') ? 'selected' : ''; ?>>Tubos</option>
+                        </select>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-slate-700">Actualizar Imagen</label>
+                        <input name="ImagenesProducto" type="file" class="form-control select-custom">
+                        <div class="mt-3 p-2 bg-light border rounded d-inline-block text-center">
+                            <p class="small text-muted mb-1 fw-bold">Imagen Actual:</p>
+                            <img src="../../imagenes/placeholder.jpg" alt="Actual" class="product-img-preview rounded border shadow-sm">
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="h5 fw-bold text-slate-700 mb-3 border-bottom pb-2">Especificaciones Técnicas</h2>
+
+                <div class="row g-3 mb-4">
+                    <div class="col-md-4"><label class="form-label fw-bold text-slate-700">Unidad de Medida</label><input name="unidad_medida" type="text" class="form-control select-custom" value="<?php echo htmlspecialchars($producto['unidad_medida'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label fw-bold text-slate-700">Calibre</label><input name="calibre" type="text" class="form-control select-custom" value="<?php echo htmlspecialchars($producto['calibre'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label fw-bold text-slate-700">Color</label><input name="color" type="text" class="form-control select-custom" value="<?php echo htmlspecialchars($producto['color'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label fw-bold text-slate-700">Metros</label><input name="metros" type="number" step="0.01" class="form-control select-custom" value="<?php echo htmlspecialchars($producto['metros'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label fw-bold text-slate-700">Kg</label><input name="kg" type="number" step="0.01" class="form-control select-custom" value="<?php echo htmlspecialchars($producto['kg'] ?? ''); ?>"></div>
+                    <div class="col-md-4"><label class="form-label fw-bold text-slate-700">Cm</label><input name="cm" type="number" step="0.01" class="form-control select-custom" value="<?php echo htmlspecialchars($producto['cm'] ?? ''); ?>"></div>
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 pt-3 border-top mt-2">
+                    <button class="btn btn-edit px-5 fw-bold" type="submit">
+                        Actualizar Cambios
+                    </button>
+                    <a href="listado.php" class="btn btn-cancel px-4 fw-bold d-flex align-items-center justify-content-center">
+                        Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-white py-4 text-center mt-auto">
+        <p class="m-0 small text-slate-400">Todos los derechos reservados © 2026 Aceros Alonso</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="listado.js"></script>
+</body>
+</html>
